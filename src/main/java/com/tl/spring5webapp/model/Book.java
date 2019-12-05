@@ -1,4 +1,4 @@
-package guru.springframework.spring5webapp.model;
+package com.tl.spring5webapp.model;
 
 import java.util.HashSet;
 import java.util.Set;

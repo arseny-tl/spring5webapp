@@ -1,34 +1,34 @@
-package guru.springframework.spring5webapp.bootstrap;
+package com.tl.spring5webapp.bootstrap;
 
-import guru.springframework.spring5webapp.model.Author;
-import guru.springframework.spring5webapp.model.Book;
-import guru.springframework.spring5webapp.model.Publisher;
-import guru.springframework.spring5webapp.repository.AuthorRepository;
-import guru.springframework.spring5webapp.repository.BookRepository;
-import guru.springframework.spring5webapp.repository.PublisherRepository;
+import com.tl.spring5webapp.model.Author;
+import com.tl.spring5webapp.model.Book;
+import com.tl.spring5webapp.model.Publisher;
+import com.tl.spring5webapp.model.User;
+import com.tl.spring5webapp.model.UserRole;
+import com.tl.spring5webapp.repository.AuthorRepository;
+import com.tl.spring5webapp.repository.BookRepository;
+import com.tl.spring5webapp.repository.PublisherRepository;
+import com.tl.spring5webapp.repository.UserRepository;
+import com.tl.spring5webapp.repository.UserRoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
   private final AuthorRepository authorRepository;
   private final BookRepository bookRepository;
   private final PublisherRepository publisherRepository;
-
-  public DevBootstrap(
-      AuthorRepository authorRepository,
-      BookRepository bookRepository,
-      PublisherRepository publisherRepository) {
-    this.authorRepository = authorRepository;
-    this.bookRepository = bookRepository;
-    this.publisherRepository = publisherRepository;
-  }
+  private final UserRepository userRepository;
+  private final UserRoleRepository userRoleRepository;
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
     initData();
+    initUsers();
   }
 
   private void initData() {
@@ -51,5 +51,19 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     publisherRepository.save(worx);
     authorRepository.save(rod);
     bookRepository.save(noEJB);
+  }
+
+  private void initUsers() {
+    UserRole guestRole = new UserRole();
+    guestRole.setName("USER");
+
+    User guest = new User();
+    guest.setPassword("asd");
+    guest.setUsername("guest");
+    guest.addRole(guestRole);
+    guestRole.getUsers().add(guest);
+
+    userRepository.save(guest);
+    userRoleRepository.save(guestRole);
   }
 }
