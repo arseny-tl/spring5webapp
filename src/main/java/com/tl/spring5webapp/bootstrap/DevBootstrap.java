@@ -13,6 +13,7 @@ import com.tl.spring5webapp.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -54,16 +55,26 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
   }
 
   private void initUsers() {
-    UserRole guestRole = new UserRole();
-    guestRole.setName("USER");
+    UserRole userRole = new UserRole();
+    userRole.setName("USER");
+    UserRole adminRole = new UserRole();
+    adminRole.setName("ADMIN");
 
-    User guest = new User();
-    guest.setPassword("asd");
-    guest.setUsername("guest");
-    guest.addRole(guestRole);
-    guestRole.getUsers().add(guest);
+    User user = new User();
+    user.setPassword(new BCryptPasswordEncoder().encode("user"));
+    user.setUsername("user");
+    user.addRole(userRole);
+    userRole.addUser(user);
 
-    userRepository.save(guest);
-    userRoleRepository.save(guestRole);
+    User admin = new User();
+    admin.setPassword(new BCryptPasswordEncoder().encode("admin"));
+    admin.setUsername("admin");
+    admin.addRole(adminRole);
+    adminRole.addUser(admin);
+
+    userRepository.save(user);
+    userRoleRepository.save(userRole);
+    userRepository.save(admin);
+    userRoleRepository.save(adminRole);
   }
 }

@@ -20,22 +20,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.requestMatchers()
-        .antMatchers("/books", "/authors")
+        .antMatchers("/books", "/author")
         .and()
         .authorizeRequests()
+        .antMatchers("/books")
+        .hasAnyAuthority("USER", "ADMIN")
+        .antMatchers("/author")
+        .hasAuthority("ADMIN")
         .anyRequest()
-        .hasRole("USER")
-        .and()
-        .formLogin()
-        .loginPage("/login")
         .permitAll()
         .and()
         .httpBasic();
-    http.anonymous().authorities("GUEST");
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  }
+
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 }

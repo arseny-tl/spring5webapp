@@ -3,6 +3,7 @@ package com.tl.spring5webapp.model;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,4 +30,23 @@ public class UserRole {
       inverseJoinColumns = @JoinColumn(name = "user_id")
   )
   private Set<User> users = new HashSet<>();
+
+  public void addUser(User user) {
+    if (users == null) {
+      users = new HashSet<>();
+    }
+    users.add(user);
+  }
+
+  public void removeUser(User user) {
+    if (users == null) {
+      users = new HashSet<>();
+    }
+    users.remove(user);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }
