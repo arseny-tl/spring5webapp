@@ -1,10 +1,10 @@
 package com.tl.spring5webapp.bootstrap;
 
-import com.tl.spring5webapp.model.Author;
-import com.tl.spring5webapp.model.Book;
-import com.tl.spring5webapp.model.Publisher;
-import com.tl.spring5webapp.model.User;
-import com.tl.spring5webapp.model.UserRole;
+import com.tl.spring5webapp.domain.Author;
+import com.tl.spring5webapp.domain.Book;
+import com.tl.spring5webapp.domain.Publisher;
+import com.tl.spring5webapp.domain.User;
+import com.tl.spring5webapp.domain.UserRole;
 import com.tl.spring5webapp.repository.AuthorRepository;
 import com.tl.spring5webapp.repository.BookRepository;
 import com.tl.spring5webapp.repository.PublisherRepository;
@@ -36,8 +36,8 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     Author eric = new Author("Eric", "Evans");
     Publisher harper = new Publisher("Harper Collins", "");
     Book ddd = new Book("Domain driven design", "1234", harper);
-    eric.getBooks().add(ddd);
-    ddd.getAuthors().add(eric);
+    eric.addBook(ddd);
+    ddd.addAuthor(eric);
 
     publisherRepository.save(harper);
     authorRepository.save(eric);
@@ -46,8 +46,8 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     Author rod = new Author("Rod", "Johnson");
     Publisher worx = new Publisher("Workx", "");
     Book noEJB = new Book("J2EE Development without EJB", "23444", worx);
-    rod.getBooks().add(noEJB);
-    noEJB.getAuthors().add(rod);
+    rod.addBook(noEJB);
+    noEJB.addAuthor(rod);
 
     publisherRepository.save(worx);
     authorRepository.save(rod);
@@ -55,20 +55,14 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
   }
 
   private void initUsers() {
-    UserRole userRole = new UserRole();
-    userRole.setName("USER");
-    UserRole adminRole = new UserRole();
-    adminRole.setName("ADMIN");
+    UserRole userRole = new UserRole("USER");
+    UserRole adminRole = new UserRole("ADMIN");
 
-    User user = new User();
-    user.setPassword(new BCryptPasswordEncoder().encode("user"));
-    user.setUsername("user");
+    User user = new User("user", new BCryptPasswordEncoder().encode("user"));
     user.addRole(userRole);
     userRole.addUser(user);
 
-    User admin = new User();
-    admin.setPassword(new BCryptPasswordEncoder().encode("admin"));
-    admin.setUsername("admin");
+    User admin = new User("admin", new BCryptPasswordEncoder().encode("admin"));
     admin.addRole(adminRole);
     adminRole.addUser(admin);
 

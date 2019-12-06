@@ -1,6 +1,5 @@
 package com.tl.spring5webapp.service.security;
 
-import com.tl.spring5webapp.model.User;
 import com.tl.spring5webapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

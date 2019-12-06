@@ -1,6 +1,6 @@
 package com.tl.spring5webapp.controller;
 
-import com.tl.spring5webapp.model.User;
+import com.tl.spring5webapp.domain.User;
 import com.tl.spring5webapp.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

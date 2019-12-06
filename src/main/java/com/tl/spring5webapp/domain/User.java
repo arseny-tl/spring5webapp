@@ -1,29 +1,23 @@
-package com.tl.spring5webapp.model;
+package com.tl.spring5webapp.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-@Data
 @Entity
-public class User implements UserDetails {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+@Getter
+@Setter
+public class User extends BaseEntity implements UserDetails {
 
   private String username;
 
@@ -31,6 +25,13 @@ public class User implements UserDetails {
 
   @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
   private Set<UserRole> roles = new HashSet<>();
+
+  public User() {}
+
+  public User(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
 
   public void addRole(UserRole role) {
     if (roles == null) {
@@ -43,11 +44,6 @@ public class User implements UserDetails {
     if (roles != null) {
       roles.remove(role);
     }
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
   }
 
   @Override

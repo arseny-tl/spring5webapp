@@ -1,35 +1,33 @@
-package com.tl.spring5webapp.model;
+package com.tl.spring5webapp.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-@Data
 @Entity
-public class UserRole {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
-
+@Getter
+@Setter
+public class UserRole extends BaseEntity {
   private String name;
 
   @ManyToMany
   @JoinTable(
       name = "user_auth",
       joinColumns = @JoinColumn(name = "auth_id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id")
-  )
+      inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<User> users = new HashSet<>();
+
+  public UserRole() {}
+
+  public UserRole(String name) {
+    this.name = name;
+  }
 
   public void addUser(User user) {
     if (users == null) {
@@ -43,10 +41,5 @@ public class UserRole {
       users = new HashSet<>();
     }
     users.remove(user);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
   }
 }
