@@ -9,7 +9,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class AspectConfig {
   @Bean
-  LoggingAspect loggingAscept() {
+  LoggingAspect loggingAspect() {
     return new LoggingAspect();
   }
 }
